@@ -1,0 +1,14 @@
+{
+    "name": "periscopeEmbed",
+    "source": [
+        "periscopeEmbedStylerController.js",
+        "widget.js"
+    ],
+    "style": [
+        "widget.css"
+    ],
+    "lastUpdate": "2019-09-17T19:10:54.610Z",
+    "folderName": "periscopeEmbed",
+    "isEnabled": true,
+    "version": "1.0"
+}

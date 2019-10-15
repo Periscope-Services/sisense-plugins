@@ -1,0 +1,25 @@
+<div data-ng-controller="plugin-periscopeEmbed.controllers.periscopeEmbedStylerController">
+  <div class="settings-pane-host">
+    <div class="pane-row">
+      <!-- Authentication token -->
+      <div class="pane-row-title">Periscope API Key</div>
+      <input type="text" placeholder="Found via 'Settings' → 'Billing & Authentication'" data-ng-blur="onBlur($event)" ng-model="model.authtoken" style="width: 100%";>
+      <br><br>
+      <!-- Dashboard ID -->
+      <div class="pane-row-title">Periscope Dashboard ID</div>
+      <input type="text" placeholder="Found via the dashboard's URL" data-ng-blur="onBlur($event)" ng-model="model.dashboardid" style="width: 100%";>
+      <br><br>
+      <!-- Chart ID -->
+      <div class="pane-row-title">Periscope Chart ID</div>
+      <input type="text" placeholder="Found via the chart's 'Share Link' URL" data-ng-blur="onBlur($event)" ng-model="model.chartid" style="width: 100%";>
+      <br><br>
+      <!-- Visible Filters -->
+      <div class="pane-row-title">Visible Filters</div>
+      <textarea rows="4" placeholder="One filter per line, example:&#10;User&#10;Device&#10;daterange" data-ng-blur="onBlur($event)" ng-model="model.visiblefilters" style="width: 100%;"></textarea>
+      <br><br>
+      <!-- Data Latency -->
+      <div class="pane-row-title">Data Latency</div>
+      <input type="number" placeholder="Maximum data latency, in minutes" min="0" data-ng-blur="onBlur($event)" ng-model="model.datats" style="width: 100%";
+    </div>
+	</div>
+</div>

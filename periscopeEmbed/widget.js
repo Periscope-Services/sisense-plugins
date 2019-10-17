@@ -119,6 +119,37 @@ prism.registerWidget("periscopeEmbed", {
                 var $frameContainer = $("<div class='periscopeEmbed'></div>");
                 $frameContainer.append($frame);
                 $(args.element).append($frameContainer);
+                
+                $(window).on("message", function(e){
+                    event = e.originalEvent.data
+                    console.log(event)
+                    if (event.event_type != "drilldown") {
+                        return
+                    }
+                        
+                    for (let filter_value of event.filter_values){
+                        filter = {
+                            jaql: {
+                                dim: widget.style.dim,
+                                datasource: widget.dashboard.datasource,
+                                datatype: "text",
+                                filter: {
+                                    members: [filter_value.column_value]
+                                },
+                                title: filter_value.filter_name
+                            }
+                        }
+                        
+                        filterOptions = {
+						    save: true,
+							refresh: true,
+							unionIfSameDimensionAndSameType: false
+						}	
+
+                        widget.dashboard.filters.update(filter, filterOptions)
+                        
+                    }
+                })
             }
         });
 			}

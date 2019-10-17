@@ -7,7 +7,7 @@ prism.registerWidget("periscopeEmbed", {
     hideNoResults: true,
     style: {
 	//set default auth token and site name here
-        //authtoken: 'your_api_key' 
+        //authtoken: 'your_api_key' ,
         //site: 'your_site_name'
     },
     options: {

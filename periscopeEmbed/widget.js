@@ -6,8 +6,9 @@ prism.registerWidget("periscopeEmbed", {
     styleEditorTemplate: "/plugins/periscopeEmbed/styler.html",
     hideNoResults: true,
     style: {
-	//set default auth token here
+	//set default auth token and site name here
         //authtoken: 'your_api_key' 
+        //site: 'your_site_name'
     },
     options: {
         title: false
@@ -120,37 +121,92 @@ prism.registerWidget("periscopeEmbed", {
                 $frameContainer.append($frame);
                 $(args.element).append($frameContainer);
                 
-                $(window).on("message", function(e){
-                    event = e.originalEvent.data
-                    console.log(event)
-                    if (event.event_type != "drilldown") {
-                        return
-                    }
-                        
-                    for (let filter_value of event.filter_values){
-                        filter = {
-                            jaql: {
-                                dim: widget.style.dim,
-                                datasource: widget.dashboard.datasource,
-                                datatype: "text",
-                                filter: {
-                                    members: [filter_value.column_value]
-                                },
-                                title: filter_value.filter_name
-                            }
-                        }
-                        
-                        filterOptions = {
-						    save: true,
-							refresh: true,
-							unionIfSameDimensionAndSameType: false
-						}	
-
-                        widget.dashboard.filters.update(filter, filterOptions)
-                        
-                    }
-                })
+                addDrilldownHandler(window, widget)
+                
+                var r = function (r, i) {
+			        var o = ["super", "contributor", "admin", "dataDesigner", "dataAdmin"];
+				    o.includes(prism.user.roleName) && (i.items.push(
+                        {
+				            type: "separator"
+				        }
+                    ), i.items.push(
+                        {
+					        caption: "Edit in Periscope",
+						    execute: function () {
+                                url = `https://app.periscopedata.com/app/${widget.style.site}/${widget.style.dashboardid}`
+                                if (widget.style.chartid) {
+							        url = url + `/?widget=${widget.style.chartid}`
+                                }
+                                window.location.href = url
+						    }
+					    }
+                    ))
+				};
+                if (widget.style.site){
+			        widget.on("beforewidgetmenu", r), widget.on("beforewidgetindashboardmenu", r)
+                }
             }
+            
+            
         });
 			}
 });
+
+
+function addDrilldownHandler(elem, widget) {
+    elem.addEventListener('message', function(event) {
+        console.log(event)
+        drilldown_source_chart = event.srcElement.chartId
+        console.log(widget)
+        
+        console.log(event.data.event_type + ' ' + drilldown_source_chart)
+                    
+        if (event.data.event_type != "drilldown" || drilldown_source_chart != widget.style.chartid) {
+            return
+        }
+                        
+        for (let filter_value of event.data.filter_values){
+            if (filter_value.filter_name == 'date_range'){
+                filter = {
+                    jaql: {
+                        dim: widget.style.dim,
+                        datasource: widget.dashboard.datasource,
+                        datatype: "datetime",
+                        filter: {
+                            from: filter_value.column_value,
+                            to: filter_value.column_value
+                        },
+                        title: filter_value.filter_name,
+                        level: 'days',
+                        merged: true
+                    }
+                }
+            }
+            else{
+                filter = {
+                    jaql: {
+                        dim: widget.style.dim,
+                        datasource: widget.dashboard.datasource,
+                        datatype: "text",
+                        filter: {
+                            members: [filter_value.column_value]
+                        },
+                        title: filter_value.filter_name,
+                        merged: true
+                    }
+                }
+            }
+            
+            console.log(filter)
+                        
+            filterOptions = {
+				save: true,
+				refresh: true,
+				unionIfSameDimensionAndSameType: true
+			}	
+
+            widget.dashboard.filters.update(filter, filterOptions)
+                        
+        }
+    }, false);
+}

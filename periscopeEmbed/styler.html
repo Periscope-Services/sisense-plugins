@@ -5,6 +5,10 @@
       <div class="pane-row-title">Periscope API Key</div>
       <input type="text" placeholder="Found via 'Settings' → 'Billing & Authentication'" data-ng-blur="onBlur($event)" ng-model="model.authtoken" style="width: 100%";>
       <br><br>
+      <!-- Site Name -->
+      <div class="pane-row-title">Periscope Site Name</div>
+      <input type="text" placeholder="Found via the site's URL" data-ng-blur="onBlur($event)" ng-model="model.site" style="width: 100%";>
+      <br><br>
       <!-- Dashboard ID -->
       <div class="pane-row-title">Periscope Dashboard ID</div>
       <input type="text" placeholder="Found via the dashboard's URL" data-ng-blur="onBlur($event)" ng-model="model.dashboardid" style="width: 100%";>
@@ -24,10 +28,7 @@
       <!-- Drilldown Dimension -->
       <div class="pane-row-title">Drilldown Dimension</div>
       <input type="text" placeholder="[table.column]" data-ng-blur="onBlur($event)" ng-model="model.dim" style="width: 100%";>
-      <br><br>
-      <!-- Site Name -->
-      <div class="pane-row-title">Periscope Site Name</div>
-      <input type="text" placeholder="Found via the site's URL" data-ng-blur="onBlur($event)" ng-model="model.site" style="width: 100%";>
+      
     </div>
 	</div>
 </div>
